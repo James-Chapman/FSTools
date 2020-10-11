@@ -13,7 +13,7 @@ void PrintUsage(char ** argv)
 {
 	std::cout << "USAGE:\n"
 		<< "  " << argv[0] << " <hashType> <path>\n\n";
-	std::cout << "  hashType - Options are: md5, sha1, sha256, sha512. MD5 will be generated for anything not supported.\n"
+	std::cout << "  hashType - Options are: md5, sha1, sha256 & sha512.\n"
 		<< "  path     - Path to a file or dir\n\n";
 }
 
@@ -37,7 +37,13 @@ std::string GenerateHash(std::filesystem::path p, std::string hashType)
 	std::string returnString;
 	Byte* buf = nullptr;
 	size_t sz = FileData(p, buf);
-	if (hashType.compare("sha1") == 0) {
+	if (hashType.compare("md5") == 0) {
+		Chocobo1::MD5 md5;
+		md5.addData(buf, sz);
+		md5.finalize();
+		returnString = md5.toString();
+	}
+	else if (hashType.compare("sha1") == 0) {
 		Chocobo1::SHA1 sha1;
 		sha1.addData(buf, sz);
 		sha1.finalize();
@@ -49,17 +55,16 @@ std::string GenerateHash(std::filesystem::path p, std::string hashType)
 		sha256.finalize();
 		returnString = sha256.toString();
 	}
-	else if (hashType.compare("sha512")) {
+	else if (hashType.compare("sha512") == 0) {
 		Chocobo1::SHA2_512 sha512;
 		sha512.addData(buf, sz);
 		sha512.finalize();
 		returnString = sha512.toString();
 	}
 	else {
-		Chocobo1::MD5 md5;
-		md5.addData(buf, sz);
-		md5.finalize();
-		returnString = md5.toString();
+		delete[] buf;
+		std::cout << "Hash type not supported!\n\n";
+		throw std::runtime_error("Hash type not supported!");
 	}
 	delete[] buf;
 	return returnString;
