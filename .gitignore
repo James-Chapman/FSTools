@@ -33,3 +33,6 @@
 
 # Visual Studio
 .vs
+/HashGen/HashGen.vcxproj.user
+/build
+/bin
