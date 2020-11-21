@@ -15,3 +15,14 @@ USAGE:
   hashType - Options are: md5, sha1, sha256 & sha512.
   path     - Path to a file or dir
 ```
+
+## Find
+Kinda like find on Linux but far more primitive.
+
+```
+USAGE:
+  Find.exe <dir> <name>
+  
+  dir   - Directory to search
+  name  - Name to search. Supports wildcard at the start or end of a string only. DSC_* or *.mp3.
+```
