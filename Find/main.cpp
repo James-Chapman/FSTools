@@ -7,7 +7,7 @@
 
 typedef uint8_t Byte;
 
-void PrintUsage(char ** argv)
+void PrintUsage(char* argv[])
 {
 	std::cout << "USAGE:\n"
 		<< "  " << argv[0] << " <dir> <name>\n\n";
@@ -16,7 +16,7 @@ void PrintUsage(char ** argv)
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
 	if (argc < 3) {
 		PrintUsage(argv);
