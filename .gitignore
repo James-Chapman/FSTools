@@ -33,6 +33,10 @@
 
 # Visual Studio
 .vs
+/DeDupe/DeDupe.vcxproj.user
+/Find/Find.vcxproj.user
 /HashGen/HashGen.vcxproj.user
 /obj
 /bin
+
+

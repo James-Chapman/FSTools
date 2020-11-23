@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
 	try {
 		args = parser.ParseArgs(argc, argv);
 	}
-	catch (std::invalid_argument ex) {
-		PrintUsage(argv);
+	catch (std::exception ex) {
+		std::cout << parser.GetUsageString(argv[0]) << std::endl;
 		std::cout << parser.GetHelpString() << std::endl;
 		return 1;
 	}

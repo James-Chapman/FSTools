@@ -75,35 +75,62 @@ public:
 	std::string GetHelpString()
 	{
 		std::stringstream ss;
+		ss << "PARAMETERS:\n\n";
 		if (m_requiredArgDescriptions.size() > 0) {
-			ss << "Required arguments:\n";
+			ss << "* Required arguments:\n";
 			for (auto it : m_requiredArgDescriptions) {
-				ss << "  " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
+				ss << "    " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
 			}
 			ss << "\n";
 		}
 		if (m_optionalArgDescriptions.size() > 0) {
-			ss << "Optional arguments:\n";
+			ss << "* Optional arguments:\n";
 			for (auto it : m_optionalArgDescriptions) {
-				ss << "  " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
+				ss << "    " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
 			}
 			ss << "\n";
 		}
 		if (m_switchDescriptions.size() > 0) {
-			ss << "Switches:\n";
+			ss << "* Switches:\n";
 			for (auto it : m_switchDescriptions) {
-				ss << "  " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
+				ss << "    " << std::setw(6) << std::left << it.first << " : " << it.second << "\n";
 			}
 			ss << "\n";
 		}
 		return ss.str();
 	}
 
+	std::string GetUsageString(std::string arg0)
+	{
+		std::stringstream ss;
+		ss << "USAGE:\n"
+			<< "  " << arg0;
+		if (m_requiredArgDescriptions.size() > 0) {
+			for (auto it : m_requiredArgDescriptions) {
+				ss << " " << it.first << " <param_value>";
+			}
+		}
+		if (m_optionalArgDescriptions.size() > 0) {
+			for (auto it : m_optionalArgDescriptions) {
+				ss << " [" << it.first << " <param_value>]";
+			}
+		}
+		if (m_switchDescriptions.size() > 0) {
+			for (auto it : m_switchDescriptions) {
+				ss << " [" << it.first << "]";
+			}
+		}
+		ss << "\n\n";
+		return ss.str();
+	}
+
 	Args ParseArgs(int argc, char* argv[])
 	{
+		int argcount = 0;
 		for (int i = 1; i < argc; i++) {
 			bool found = false;
 			std::string arg = argv[i];
+			if (arg[0] == '-') argcount++;
 
 			{
 				auto it = m_args.m_requiredArgs.find(arg);
@@ -133,6 +160,9 @@ public:
 			if (!found) {
 				throw std::invalid_argument("Unrecognised parameter " + arg);
 			}
+		}
+		if (argcount < m_args.m_requiredArgs.size()) {
+			throw std::runtime_error("Missing required parameters");
 		}
 		return m_args;
 	}
